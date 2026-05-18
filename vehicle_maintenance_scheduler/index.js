@@ -5,33 +5,22 @@ const optimizeSchedule = require("./scheduler");
 const Log = require("./logger");
 
 const app = express();
-
-app.get("/optimize", async (req, res) => {
+app.use(express.json());
+app.post("/optimize", async (req, res) => {
 
     try {
 
-        const tasks = [
-            {
-                vehicleId: "V1",
-                estimatedDurationHours: 3,
-                impactScore: 40
-            },
-            {
-                vehicleId: "V2",
-                estimatedDurationHours: 4,
-                impactScore: 50
-            },
-            {
-                vehicleId: "V3",
-                estimatedDurationHours: 2,
-                impactScore: 30
-            }
-        ];
+        const tasks = req.body.tasks;
 
-        let maxHours = 5;
+        const maxHours = req.body.availableHours;
 
-        let result = optimizeSchedule(tasks, maxHours);
+        if (!tasks || !maxHours) {
 
+            return res.status(400).json({
+                success: false,
+                message: "invalid input"
+            });
+        }
         await Log(
             "backend",
             "info",

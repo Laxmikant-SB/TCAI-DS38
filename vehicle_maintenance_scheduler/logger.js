@@ -1,11 +1,14 @@
 async function Log(stack, level, pkg, message) {
 
-    console.log({
+    let logData = {
         stack,
         level,
         package: pkg,
-        message
-    });
+        message,
+        time: new Date()
+    };
+
+    console.log(logData);
 
 }
 
