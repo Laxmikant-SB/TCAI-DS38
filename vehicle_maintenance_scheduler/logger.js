@@ -9,7 +9,6 @@ async function Log(stack, level, pkg, message) {
     };
 
     console.log(logData);
-
 }
 
 module.exports = Log;

@@ -5,7 +5,9 @@ const optimizeSchedule = require("./scheduler");
 const Log = require("./logger");
 
 const app = express();
+
 app.use(express.json());
+
 app.post("/optimize", async (req, res) => {
 
     try {
@@ -21,6 +23,9 @@ app.post("/optimize", async (req, res) => {
                 message: "invalid input"
             });
         }
+
+        let result = optimizeSchedule(tasks, maxHours);
+
         await Log(
             "backend",
             "info",
@@ -28,18 +33,20 @@ app.post("/optimize", async (req, res) => {
             "schedule optimized"
         );
 
-        res.json({
+        res.status(200).json({
             success: true,
             data: result
         });
 
     } catch (err) {
 
+        console.log(err);
+
         await Log(
             "backend",
             "error",
             "service",
-            "error in optimization"
+            err.message
         );
 
         res.status(500).json({
@@ -52,6 +59,6 @@ app.post("/optimize", async (req, res) => {
 
 app.listen(3000, () => {
 
-    console.log("server started");
+    console.log("server started on port 3000");
 
 });

@@ -9,6 +9,7 @@ function optimizeSchedule(tasks, maxHours) {
     for (let i = 1; i <= n; i++) {
 
         let duration = tasks[i - 1].estimatedDurationHours;
+
         let impact = tasks[i - 1].impactScore;
 
         for (let h = 0; h <= maxHours; h++) {
@@ -23,7 +24,6 @@ function optimizeSchedule(tasks, maxHours) {
             } else {
 
                 dp[i][h] = dp[i - 1][h];
-
             }
         }
     }
