@@ -6,41 +6,58 @@ const Log = require("./logger");
 
 const app = express();
 
-app.get("/", async (req, res) => {
+app.get("/optimize", async (req, res) => {
 
-    const tasks = [
-        {
-            vehicleId: "V1",
-            estimatedDurationHours: 3,
-            impactScore: 40
-        },
-        {
-            vehicleId: "V2",
-            estimatedDurationHours: 4,
-            impactScore: 50
-        },
-        {
-            vehicleId: "V3",
-            estimatedDurationHours: 2,
-            impactScore: 30
-        }
-    ];
+    try {
 
-    let maxHours = 5;
+        const tasks = [
+            {
+                vehicleId: "V1",
+                estimatedDurationHours: 3,
+                impactScore: 40
+            },
+            {
+                vehicleId: "V2",
+                estimatedDurationHours: 4,
+                impactScore: 50
+            },
+            {
+                vehicleId: "V3",
+                estimatedDurationHours: 2,
+                impactScore: 30
+            }
+        ];
 
-    let result = optimizeSchedule(tasks, maxHours);
+        let maxHours = 5;
 
-    await Log(
-        "backend",
-        "info",
-        "service",
-        "schedule optimized"
-    );
+        let result = optimizeSchedule(tasks, maxHours);
 
-    res.json({
-        success: true,
-        maxImpact: result
-    });
+        await Log(
+            "backend",
+            "info",
+            "service",
+            "schedule optimized"
+        );
+
+        res.json({
+            success: true,
+            data: result
+        });
+
+    } catch (err) {
+
+        await Log(
+            "backend",
+            "error",
+            "service",
+            "error in optimization"
+        );
+
+        res.status(500).json({
+            success: false,
+            message: "server error"
+        });
+    }
 
 });
 

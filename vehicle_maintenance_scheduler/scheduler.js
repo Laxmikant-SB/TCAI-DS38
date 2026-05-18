@@ -28,7 +28,24 @@ function optimizeSchedule(tasks, maxHours) {
         }
     }
 
-    return dp[n][maxHours];
+    let selectedVehicles = [];
+
+    let h = maxHours;
+
+    for (let i = n; i > 0; i--) {
+
+        if (dp[i][h] !== dp[i - 1][h]) {
+
+            selectedVehicles.push(tasks[i - 1]);
+
+            h = h - tasks[i - 1].estimatedDurationHours;
+        }
+    }
+
+    return {
+        maxImpact: dp[n][maxHours],
+        selectedVehicles: selectedVehicles
+    };
 }
 
 module.exports = optimizeSchedule;
